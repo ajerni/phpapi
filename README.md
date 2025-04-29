@@ -23,7 +23,7 @@ A minimalist PHP routing framework inspired by Slim that provides a simple way t
    - `.htaccess` - URL rewriting for Apache
 
 2. Update your Database settings:
-   - `config_censored.php` - Add your DB connection settings here and rename the file to `censored.php` and upload it to your server.
+   - `dbconfig_censored.php` - Add your DB connection settings here and rename the file to `dbconfig.php` and upload it to your server.
 
 3. Optional - Configure your web server (usually already done by your provider):
    - Apache: Ensure mod_rewrite is enabled
