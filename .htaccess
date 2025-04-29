@@ -1,0 +1,31 @@
+# Enable rewrite engine
+RewriteEngine On
+
+# Make sure mod_rewrite is enabled
+<IfModule !mod_rewrite.c>
+    ErrorDocument 500 "mod_rewrite is not enabled on your server. Please contact your hosting provider."
+</IfModule>
+
+# Set the base directory
+# RewriteBase /
+
+# Don't rewrite files or directories
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rewrite everything else to serve.php
+RewriteRule ^(.*)$ serve.php [QSA,L]
+
+# PHP settings
+<IfModule mod_php7.c>
+    php_flag display_errors On
+    php_value error_reporting E_ALL
+</IfModule>
+
+<IfModule mod_php8.c>
+    php_flag display_errors On
+    php_value error_reporting E_ALL
+</IfModule>
+
+# Handle errors
+ErrorDocument 404 /serve.php 
