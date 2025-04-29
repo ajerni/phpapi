@@ -14,7 +14,7 @@ error_reporting(E_ALL);
 
 // Root route
 $app->get('/', function($request, $response) {
-    $response->getBody()->write('Welcome to the lightweight PHP routing framework!');
+    $response->getBody()->write('Welcome to the lightweight PHP routing framework! View the source and documentation on <a href="https://github.com/ajerni/phpapi" target="_blank" rel="noopener noreferrer">GitHub</a>.');
     return $response;
 });
 
