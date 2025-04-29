@@ -5,7 +5,7 @@
  * Contains database connection settings and creates PDO instance
  */
 
-// Database configuration
+// Database configuration (enter your own settings here)
 $dbConfig = [
     'host' => 'your_host',
     'dbname' => 'your_database',
@@ -14,7 +14,7 @@ $dbConfig = [
     'charset' => 'utf8mb4'
 ];
 
-// Create PDO instance
+// Create PDO instance (no changes needed)
 try {
     $dsn = "mysql:host={$dbConfig['host']};dbname={$dbConfig['dbname']};charset={$dbConfig['charset']}";
     $pdo = new PDO($dsn, $dbConfig['username'], $dbConfig['password'], [
