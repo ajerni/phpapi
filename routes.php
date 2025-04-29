@@ -8,6 +8,10 @@
 // Import database configuration
 require_once 'dbconfig.php';
 
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 // Root route
 $app->get('/', function($request, $response) {
     $response->getBody()->write('Welcome to the lightweight PHP routing framework!');
@@ -77,16 +81,34 @@ $app->get('/api/users/{id}', function($request, $response, $args) use ($pdo) {
 
 // Create a new user
 $app->post('/api/users', function($request, $response) use ($pdo) {
+    // Log incoming request
+    error_log('POST /api/users request received');
+    
+    // Get raw request body for debugging
+    $rawBody = file_get_contents('php://input');
+    error_log('Raw request body: ' . $rawBody);
+    
     try {
+        // Get parsed body and log it
         $data = $request->getParsedBody();
+        error_log('Parsed body: ' . json_encode($data));
+        
+        // If data is null, try to parse the raw JSON manually
+        if ($data === null) {
+            error_log('Parsed body is null, trying manual JSON parse');
+            $data = json_decode($rawBody, true);
+            error_log('Manually parsed data: ' . json_encode($data));
+        }
         
         // Validate required fields
         if (empty($data['name']) || empty($data['email']) || empty($data['password'])) {
+            error_log('Validation failed: Missing required fields');
             $response = $response->withStatus(400);
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write(json_encode([
                 'status' => 'error',
-                'message' => 'Name, email and password are required'
+                'message' => 'Name, email and password are required',
+                'received_data' => $data
             ]));
             return $response;
         }
@@ -96,24 +118,31 @@ $app->post('/api/users', function($request, $response) use ($pdo) {
         
         // Insert the new user
         $stmt = $pdo->prepare('INSERT INTO users (name, email, password) VALUES (?, ?, ?)');
-        $stmt->execute([$data['name'], $data['email'], $passwordHash]);
+        error_log('Executing query with params: ' . $data['name'] . ', ' . $data['email'] . ', [password_hash]');
+        $result = $stmt->execute([$data['name'], $data['email'], $passwordHash]);
+        error_log('Query execution result: ' . ($result ? 'true' : 'false'));
         $userId = $pdo->lastInsertId();
+        error_log('Last insert ID: ' . $userId);
         
         $response = $response->withStatus(201);
         $response = $response->withHeader('Content-Type', 'application/json');
-        $response->getBody()->write(json_encode([
+        $responseData = [
             'status' => 'success',
             'message' => 'User created successfully',
             'userId' => $userId
-        ]));
+        ];
+        error_log('Sending response: ' . json_encode($responseData));
+        $response->getBody()->write(json_encode($responseData));
         return $response;
     } catch (PDOException $e) {
+        error_log('Database error: ' . $e->getMessage());
         $response = $response->withStatus(500);
         $response = $response->withHeader('Content-Type', 'application/json');
         $errorMessage = $e->getMessage();
         
         // Check for duplicate email
         if (strpos($errorMessage, 'Duplicate entry') !== false && strpos($errorMessage, 'email') !== false) {
+            error_log('Duplicate email detected');
             $response->getBody()->write(json_encode([
                 'status' => 'error',
                 'message' => 'Email already exists'
@@ -124,6 +153,15 @@ $app->post('/api/users', function($request, $response) use ($pdo) {
                 'message' => 'Database error: ' . $errorMessage
             ]));
         }
+        return $response;
+    } catch (Exception $e) {
+        error_log('General error: ' . $e->getMessage());
+        $response = $response->withStatus(500);
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'status' => 'error',
+            'message' => 'General error: ' . $e->getMessage()
+        ]));
         return $response;
     }
 });

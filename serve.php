@@ -58,16 +58,44 @@ interface ServerRequestInterface {
     public function getUri();
     public function getMethod();
     public function getAttribute($name, $default = null);
+    public function getParsedBody();
 }
 
 class Request implements ServerRequestInterface {
     private $uri;
     private $method;
     private $attributes = [];
+    private $parsedBody = null;
     
     public function __construct() {
         $this->uri = $_SERVER['REQUEST_URI'] ?? '/';
         $this->method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        
+        // Parse request body for POST, PUT, and PATCH requests
+        if (in_array($this->method, ['POST', 'PUT', 'PATCH', 'DELETE'])) {
+            $this->parseBody();
+        }
+    }
+    
+    private function parseBody() {
+        $contentType = isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '';
+        
+        // Parse JSON content
+        if (strpos($contentType, 'application/json') !== false) {
+            $input = file_get_contents('php://input');
+            if (!empty($input)) {
+                $this->parsedBody = json_decode($input, true);
+                error_log('JSON parsed body in Request class: ' . json_encode($this->parsedBody));
+            }
+        } 
+        // Parse form data
+        else if (strpos($contentType, 'application/x-www-form-urlencoded') !== false) {
+            $this->parsedBody = $_POST;
+        }
+        // Parse multipart form data (also handled by $_POST)
+        else if (strpos($contentType, 'multipart/form-data') !== false) {
+            $this->parsedBody = $_POST;
+        }
     }
     
     public function getUri() {
@@ -85,6 +113,10 @@ class Request implements ServerRequestInterface {
     public function withAttribute($name, $value) {
         $this->attributes[$name] = $value;
         return $this;
+    }
+    
+    public function getParsedBody() {
+        return $this->parsedBody;
     }
 }
 
@@ -169,7 +201,7 @@ class App {
 // Create app instance
 $app = new App();
 
-// Include route definitions
+// Include route definitions (can use more than one file - just add them separately for you project)
 require_once 'routes.php';
 
 // Run application
