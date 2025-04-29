@@ -18,18 +18,18 @@ A minimalist PHP routing framework inspired by Slim that provides a simple way t
 
 1. Upload the following files to your server:
    - `serve.php` - Core framework
-   - `routes.php` - Your API route definitions
+   - `routes.php` - Your API route definitions (the only file you need to work on depending on your needs)
    - `index.php` - Simple entry point
    - `.htaccess` - URL rewriting for Apache
 
 2. Update your Database settings:
-   - `config_censored.php` - Add your DB connection settings here and rename the file to `censored.php`
+   - `config_censored.php` - Add your DB connection settings here and rename the file to `censored.php` and upload it to your server.
 
-3. Configure your web server (usually already done by your provider):
+3. Optional - Configure your web server (usually already done by your provider):
    - Apache: Ensure mod_rewrite is enabled
    - Nginx: Configure URL rewriting to route requests to index.php
 
-## Example Usage
+## Example Usage (how to make your own routes)
 
 Define routes in `routes.php`:
 
