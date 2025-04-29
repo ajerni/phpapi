@@ -2,19 +2,15 @@
 /**
  * Route definitions
  * 
- * Define all your API routes in this file
+ * Define all your API routes in this file (or create your own additional files and include them in serve.php)
  */
 
 // Import database configuration
 require_once 'dbconfig.php';
 
-// Enable error reporting for debugging
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 // Root route
 $app->get('/', function($request, $response) {
-    $response->getBody()->write('Welcome to the lightweight PHP routing framework! View the source and documentation on <a href="https://github.com/ajerni/phpapi" target="_blank" rel="noopener noreferrer">GitHub</a>.');
+    $response->getBody()->write('Welcome to the lightweight PHP routing framework! <br><br> View the source code and documentation on <a href="https://github.com/ajerni/phpapi" target="_blank" rel="noopener noreferrer">GitHub</a>.');
     return $response;
 });
 
