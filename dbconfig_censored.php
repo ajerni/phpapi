@@ -1,6 +1,6 @@
 <?php
 /**
- * Database configuration
+ * Database configuration (MySQL)
  * 
  * Contains database connection settings and creates PDO instance
  */
