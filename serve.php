@@ -1,6 +1,10 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 /**
- * Lightweight PHP Routing Framework (based on Slim Framework)
+ * Lightweight PHP Routing Framework
  */
 
 // PSR-7 Interfaces
@@ -118,6 +122,11 @@ class Request implements ServerRequestInterface {
     public function getParsedBody() {
         return $this->parsedBody;
     }
+
+    // Add this method to support getQueryParams in blogroutes.php
+    public function getQueryParams() {
+        return $_GET;
+    }
 }
 
 class App {
@@ -201,8 +210,15 @@ class App {
 // Create app instance
 $app = new App();
 
-// Include route definitions (can use more than one file - just add them separately for you project)
+// Add CORS middleware if the file exists
+if (file_exists(__DIR__ . '/cors.php')) {
+    require_once __DIR__ . '/cors.php';
+}
+
+// Include route definitions
 require_once 'routes.php';
+// Include blog routes
+require_once 'blogroutes.php';
 
 // Run application
 $app->run(); 
