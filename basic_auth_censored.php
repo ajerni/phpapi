@@ -2,7 +2,8 @@
 // basic_auth.php
 
 function requireBasicAuth($request, $response) {
-
+    
+    // Set your username and password here
     $validUser = 'your_username';
     $validPass = 'your_password';
 
