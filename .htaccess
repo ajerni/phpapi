@@ -1,6 +1,9 @@
 # Enable rewrite engine
 RewriteEngine On
 
+# Ensure Authorization header is passed to PHP
+SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
+
 # Make sure mod_rewrite is enabled
 <IfModule !mod_rewrite.c>
     ErrorDocument 500 "mod_rewrite is not enabled on your server. Please contact your hosting provider."

@@ -5,6 +5,8 @@
  * Define all your blog API routes in this file
  */
 
+require_once __DIR__ . '/basic_auth.php';
+
 // Helper function to handle CORS preflight requests
 function handleCORS($request, $response) {
     // Allow requests from the blog frontend
@@ -224,6 +226,8 @@ $app->post('/api/posts', function($request, $response) use ($pdo) {
     // Handle CORS preflight
     $corsResponse = handleCORS($request, $response);
     if ($corsResponse) return $corsResponse;
+
+    requireBasicAuth($request, $response);
     
     try {
         $data = $request->getParsedBody();
@@ -312,6 +316,8 @@ $app->put('/api/posts/{id}', function($request, $response, $args) use ($pdo) {
     // Handle CORS preflight
     $corsResponse = handleCORS($request, $response);
     if ($corsResponse) return $corsResponse;
+
+    requireBasicAuth($request, $response);
     
     try {
         $id = $args['id'];
@@ -451,6 +457,8 @@ $app->delete('/api/posts/{id}', function($request, $response, $args) use ($pdo) 
     // Handle CORS preflight
     $corsResponse = handleCORS($request, $response);
     if ($corsResponse) return $corsResponse;
+
+    requireBasicAuth($request, $response);
     
     try {
         $id = $args['id'];

@@ -29,6 +29,12 @@ A minimalist PHP routing framework inspired by Slim that provides a simple way t
    - Apache: Ensure mod_rewrite is enabled
    - Nginx: Configure URL rewriting to route requests to index.php
 
+4. Optional - When adding your own routes files:
+   - add them to the end of `serve.php`
+
+5. Optional - if you want base auth protected routes (see `blogroutes.php` for example):
+   - rename the `basic_auth_censored.php` file to `basic_auth.php`, set your username and password and upload it to your server.
+   
 ## Example Usage (how to make your own routes)
 
 Define routes in `routes.php`:

@@ -215,7 +215,7 @@ if (file_exists(__DIR__ . '/cors.php')) {
     require_once __DIR__ . '/cors.php';
 }
 
-// Include route definitions
+// Include route definitions (add your own here)
 require_once 'routes.php';
 // Include blog routes
 require_once 'blogroutes.php';
