@@ -219,6 +219,8 @@ if (file_exists(__DIR__ . '/cors.php')) {
 require_once 'routes.php';
 // Include blog routes
 require_once 'blogroutes.php';
+// Include Jeanine's blog routes
+require_once 'jeanineblogroutes.php';
 
 // Run application
 $app->run(); 
