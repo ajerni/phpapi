@@ -5,6 +5,8 @@
  * Define all your blog API routes in this file
  */
 
+ // allow all origins are listed in blogroutes.php (not to double handleCORS)
+
 require_once __DIR__ . '/basic_auth.php';
 
 // GET all blog posts

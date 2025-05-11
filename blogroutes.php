@@ -13,6 +13,8 @@ function handleCORS($request, $response) {
     $allowedOrigins = [
         'https://blog.andierni.ch',
         'https://aetest.andierni.ch',
+        'https://www.jeanineblog.ch',
+        'https://jeanineblog.ch',
         'http://localhost:4321',   // Astro dev server
         'http://localhost:3000'    // Alternative local dev server
     ];
